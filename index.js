@@ -34,8 +34,8 @@ client.on('message', async function (message) {
   if (message.channel.name.toLowerCase() === 'crypto' && command === 'gas') {
     const data = await fetch('http://178.62.249.30:64342/api')
     const json = await data.json()
-
     const gas = json.eth_last
+
     const fast = json.eth[0]
     const medium = json.eth[1]
     const slow = json.eth[2]
@@ -46,16 +46,19 @@ client.on('message', async function (message) {
       const canvas = createCanvas(400, 200)
       const ctx = canvas.getContext('2d')
 
+      ctx.fillStyle = '#0f0f0f'
+      ctx.fillRect(0, 0, canvas.width, canvas.height)
+
       ctx.strokeStyle = 'rgba(255,0,0,1)'
-      ctx.moveTo(10, 100)
+      ctx.moveTo(10, scale(slow_min, fast_max, canvas.height, 0)(fast[0]))
       ctx.beginPath()
       fast.map((p, i) => {
         ctx.lineTo((i * canvas.width) / fast.length, scale(slow_min, fast_max, canvas.height, 0)(p))
       })
       ctx.stroke()
 
-      ctx.strokeStyle = 'rgba(255,255,0,1)'
-      ctx.moveTo(10, 100)
+      ctx.strokeStyle = 'rgba(0,0,255,1)'
+      ctx.moveTo(10, scale(slow_min, fast_max, canvas.height, 0)(medium[0]))
       ctx.beginPath()
       medium.map((p, i) => {
         ctx.lineTo(
@@ -66,12 +69,20 @@ client.on('message', async function (message) {
       ctx.stroke()
 
       ctx.strokeStyle = 'rgba(0,255,0,1)'
-      ctx.moveTo(10, 100)
+      ctx.moveTo(10, scale(slow_min, fast_max, canvas.height, 0)(slow[0]))
       ctx.beginPath()
       slow.map((p, i) => {
         ctx.lineTo((i * canvas.width) / slow.length, scale(slow_min, fast_max, canvas.height, 0)(p))
       })
       ctx.stroke()
+
+      ctx.fillStyle = '#fff'
+      ctx.font = '14px Impact'
+      ctx.fillText(`${fast_max} Gwei`, 2, 13)
+      ctx.fillText(`${slow_min} Gwei`, 2, 198)
+      ctx.fillText(`${gas[0]}`, 370, scale(slow_min, fast_max, canvas.height, 0)(gas[0]) + 5)
+      ctx.fillText(`${gas[1]}`, 370, scale(slow_min, fast_max, canvas.height, 0)(gas[1]) + 5)
+      ctx.fillText(`${gas[2]}`, 370, scale(slow_min, fast_max, canvas.height, 0)(gas[2]) + 5)
 
       const buf = canvas.toBuffer('image/jpeg', { quality: 0.8 })
       const attachment = new Discord.MessageAttachment(buf, 'image.jpeg')
