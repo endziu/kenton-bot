@@ -5,11 +5,9 @@ const config = require('./config.json')
 const prefix = '!'
 const client = new Discord.Client()
 
-// const asciichart = require('asciichart')
-// const chartConfig = {
-//   colors: [asciichart.red, asciichart.yellow, asciichart.green],
-//   height: 15,
-// }
+const { createCanvas } = require('canvas')
+const canvas = createCanvas(200, 200)
+const ctx = canvas.getContext('2d')
 
 client.on('message', async function (message) {
   if (message.author.bot) return
@@ -26,6 +24,24 @@ client.on('message', async function (message) {
 
   if (command === 'prune' && message.author.id === '214820207452094466') {
     message.channel.bulkDelete(args[0] || 3, true)
+  }
+
+  if (command === 'img') {
+    const txt = args[0] || 'szipupi!'
+    ctx.font = '42px Impact'
+    ctx.fillStyle = 'rgba(255,255,255,1)'
+    ctx.fillText(txt, 20, 100)
+
+    ctx.strokeStyle = 'rgba(255,255,255,1)'
+    ctx.beginPath()
+    ctx.lineTo(20, 40)
+    ctx.lineTo(180, 40)
+    ctx.stroke()
+
+    const buf = canvas.toBuffer('image/jpeg', { quality: 0.8 })
+    const attachment = new Discord.MessageAttachment(buf, 'image.jpeg')
+
+    message.channel.send('an image!', attachment)
   }
 
   if (message.channel.name.toLowerCase() === 'crypto' && command === 'gas') {
