@@ -6,8 +6,6 @@ const prefix = '!'
 const client = new Discord.Client()
 
 const { createCanvas } = require('canvas')
-const canvas = createCanvas(200, 200)
-const ctx = canvas.getContext('2d')
 
 client.on('message', async function (message) {
   if (message.author.bot) return
@@ -27,6 +25,8 @@ client.on('message', async function (message) {
   }
 
   if (command === 'img') {
+    const canvas = createCanvas(200, 200)
+    const ctx = canvas.getContext('2d')
     const txt = args[0] || 'szipupi!'
     ctx.font = '42px Impact'
     ctx.fillStyle = 'rgba(255,255,255,1)'
