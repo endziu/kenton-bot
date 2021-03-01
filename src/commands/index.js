@@ -12,7 +12,7 @@ const commands = {
 
 module.exports = async (msg) => {
   // console.log(msg)
-  if (msg.channel.name === 'crypto') {
+  if (msg.channel.name === 'dev') {
     const args = msg.content.split(' ')
     if (args.length == 0 || args[0].charAt(0) !== '!') return
     const command = args.shift().substr(1)
