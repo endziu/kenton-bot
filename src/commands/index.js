@@ -11,7 +11,7 @@ const commands = {
 }
 
 module.exports = async (msg) => {
-  // console.log(msg)
+  if (msg.author.bot) return
   if (msg.channel.name === 'crypto') {
     const args = msg.content.split(' ')
     if (args.length == 0 || args[0].charAt(0) !== '!') return
