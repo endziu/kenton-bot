@@ -13,9 +13,9 @@ const commands = {
 module.exports = async (msg) => {
   if (msg.author.bot) return
   if (msg.channel.name === 'crypto') {
-    const args = msg.content.split(' ')
-    if (args.length == 0 || args[0].charAt(0) !== '!') return
-    const command = args.shift().substr(1)
+    const [commandString, ...args] = msg.content.split(' ')
+    if (commandString.charAt(0) !== '!') return
+    const command = commandString.substring(1)
     if (Object.keys(commands).includes(command)) {
       commands[command](msg, args)
     }
