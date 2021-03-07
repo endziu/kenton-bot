@@ -1,7 +1,5 @@
 const Discord = require('discord.js')
 const fetch = require('node-fetch')
-const { createCanvas } = require('canvas')
-const canvas = createCanvas(400, 200)
 
 module.exports = async (message, args) => {
   const data = await fetch('http://178.62.249.30:64342/api')
@@ -12,20 +10,23 @@ module.exports = async (message, args) => {
   const medium = json.eth[1]
   const slow = json.eth[2]
 
-  const slow_min = Math.min(...slow)
-  const fast_max = Math.max(...fast)
-
-  const scale = (s1, e1, s2, e2) => (value) => {
-    const range1 = e1 - s1
-    const range2 = e2 - s2
-    const ratio = (value - s1) / range1
-    const newValue = ratio * range2 + s2
-    return newValue
-  }
-  const toScreenHeight = scale(slow_min, fast_max, canvas.height, 0)
-
   if (args[0] === 'plot') {
+    const { createCanvas } = require('canvas')
+    const canvas = createCanvas(400, 200)
     const ctx = canvas.getContext('2d')
+
+    const scale = (s1, e1, s2, e2) => (value) => {
+      const range1 = e1 - s1
+      const range2 = e2 - s2
+      const ratio = (value - s1) / range1
+      const newValue = ratio * range2 + s2
+      return newValue
+    }
+
+    const slow_min = Math.min(...slow)
+    const fast_max = Math.max(...fast)
+    const toScreenHeight = scale(slow_min, fast_max, canvas.height, 0)
+
     // bg color
     ctx.fillStyle = '#0f0f0f'
     ctx.fillRect(0, 0, canvas.width, canvas.height)

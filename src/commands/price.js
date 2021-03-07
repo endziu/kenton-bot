@@ -9,5 +9,6 @@ module.exports = async (message, args) => {
   )
   const json = await data.json()
   const result = json[currency][fiat] || '...'
+
   message.reply(`${currency} is worth: ${result} ${fiat}.`)
 }
